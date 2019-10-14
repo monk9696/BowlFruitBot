@@ -28,16 +28,18 @@ client.connect();
 
 client.on('chat', (channel, userstate, message, self) => {
 	console.log(`Message "${message}" received from ${userstate['display-name']}`);
-      // Do not repond if the message is from the connected identity.
-	console.log(userstate);
+    // Do not repond if the message is from the connected identity.
+	//console.log(userstate);
 
 	if (self) return;
 	
-	client.say(channel, "hello");
+	
 
 	if (options.identity && message === '!command') {
 	// If an identity was provided, respond in channel with message.
-	client.say(channel, 'Hello world!');
+		client.say(channel, 'Command');
+	}else{
+		client.say(channel, "Not Command");	
 	}
 });
 

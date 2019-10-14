@@ -1,6 +1,6 @@
 {
 	"options":{
-		"debug": false
+		"debug": true
 	},
 	"connection":{
 		"reconnect": true,
@@ -8,7 +8,7 @@
 	},
 	"identity":{
 		"username": "bowlfruitbot",
-		"password": "oauth:mnsx46b3s0e4htdc7njh9zfgzcdvcj"
+		"password": "oauth:"
 	},
 	"channels":["#monk9696"]
 }

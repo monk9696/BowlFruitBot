@@ -1,22 +1,6 @@
 const twitch = require("twitch-js");
 const options = require("./option.json");
 
-var option = {
-	options: {
-		// Debugging information will be outputted to the console.
-		debug: true
-	},
-	connection: {
-		reconnect: true,
-		secure: true
-	},
-	// If you want to connect as a certain user, provide an identity here:
-	identity: {
-       	username: 'bowlfruitbot',
-		password: 'oauth:mnsx46b3s0e4htdc7njh9zfgzcdvcj',
-	},
-	channels: ["monk9696"]//,'jefmajor']
-};
 
 
 const client = new twitch.client(options);

@@ -1,4 +1,14 @@
 {
-	"user": "username",
-	"pass": "password"
+	"options":{
+		"debug": false
+	},
+	"connection":{
+		"reconnect": true,
+		"secure": true
+	},
+	"identity":{
+		"username": "bowlfruitbot",
+		"password": "oauth:mnsx46b3s0e4htdc7njh9zfgzcdvcj"
+	},
+	"channels":["#monk9696"]
 }

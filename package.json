@@ -1,0 +1,9 @@
+{
+	"name": "BowlFruitBot",
+	"Version": "0.1",
+	"main": "BFBot.js",
+	"dependencies": {
+		"twitch-js": "^1.2.17"
+	}
+
+}

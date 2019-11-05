@@ -57,6 +57,18 @@ client.on('chat', (channel, userstate, message, self) => {
 	}
 });
 
+client.on('join', (channel, username, self) => {
+	console.log("Joined: " + channel + " " + username + " " + self);
+});
+
+client.on('part', (channel, username, self) => {
+	console.log("Left: " + channel + " " + username + " " + self);
+});
+
+
+client.on('subscription', (channel, username, method, message, userstate) =>{
+	console.log("Subscription: " + channel + " " + username+ " " + method + " " + message + " " + userstate);
+})
 
 client.on('connected', connectedHandler);
 

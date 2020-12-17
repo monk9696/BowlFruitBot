@@ -1,2 +1,6 @@
 /node_modules
 twitch.sublime-workspace
+config.json
+Mongo.bat
+MongoTest.bat
+mongoTest.js

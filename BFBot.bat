@@ -1,3 +1,3 @@
 @echo off
-node --harmony --no-warnings .
+node BFBot.js --harmony --no-warnings .
 pause

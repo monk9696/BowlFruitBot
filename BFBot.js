@@ -1,63 +1,85 @@
-const twitch = require("twitch-js");
+const twitch = require("tmi.js");
 
-const options = require("./option.json");
+const settings = require("./config.json");
 
 const fs = require("./filewrite.js");
 
 let write = new fs();
 
-const client = new twitch.client(options);
+const client = new twitch.client(settings.conn);
 
-var messages = require("./message.json");
+const messages = {
+	"parse": ["baer"],
+	"fbb": [],
+	"bfb": [],
+	"ban": [],
+	"cheer": [],
+	"filter": []
+}
+
+let Blocker = false;
+
+let parse = messages.parse;
+
+const { MongoClient } = require("mongodb");
+
+
 
 client.connect();
 
+client.on('connected', connectedHandler);
+
+
 client.on('chat', (channel, userstate, message, self) => {
+
+
 	
 	if (self) {
 		return;
 	}
 
+	logMessage(userstate, message);
+
+
 //	console.log("hi " + userstate.username);
 
 //	console.log(`Message "${message}" received from ${userstate['display-name']}`);
-
+/*
 	if (message.toLowerCase().indexOf("fbb") !== -1){
-		messages.fbb.push(message);
+		messages.fbb.push({"username": userstate.username, "message": message});
 	}else if(message.toLowerCase().indexOf("fruitbowlbot") !== -1){
-		messages.fbb.push(message);
+		messages.fbb.push({"username": userstate.username, "message": message});
 	}else if(message.toLowerCase().indexOf("fruit bowl bot") !== -1){
-		messages.fbb.push(message);
+		messages.fbb.push({"username": userstate.username, "message": message});
 	}
+*/
 
-	if(message.toLowerCase().indexOf("cohh") !== -1){
-		messages.cohh.push(message);
-	}
+
 	
 	let args = message.split(" ");
 	let command = args.shift();
-
+/*
 	if (command.indexOf("bfb") !== 0){
 		if(message.toLowerCase().indexOf("bfb") !== -1){
-			messages.bfb.push(message);
+			messages.bfb.push({"username": userstate.username, "message": message});
 		}else if(message.toLowerCase().indexOf("bowlfruitbot") !== -1){
-			messages.bfb.push(message);
+			messages.bfb.push({"username": userstate.username, "message": message});
 		}else if(message.toLowerCase().indexOf("bowl fruit bot") !== -1){
-			messages.bfb.push(message);
+			messages.bfb.push({"username": userstate.username, "message": message});
 		}
 		return 0;
 	}
-
+*/
 	command = command.slice(3);
 
-	if (options.identity && command === 'Hi'){
+	if (settings.identity && command === 'Hi'){
 	// If an identity was provided, respond in channel with message.
 		//client.say(channel, 'Hello');
 	}else{
 		//client.say(channel, `${userstate['display-name']}, Who are you how do you know that I am a bot`);	
 	}
 });
-
+/*
 client.on('join', (channel, username, self) => {
 	console.log("Joined: " + channel + " " + username + " " + self);
 });
@@ -65,7 +87,7 @@ client.on('join', (channel, username, self) => {
 client.on('part', (channel, username, self) => {
 	console.log("Left: " + channel + " " + username + " " + self);
 });
-
+*/
 client.on('subscription', (channel, username, method, message, userstate) =>{
 	if(message !== null){
 		console.log("Sub: " + channel + " " + username + " " + message);
@@ -110,15 +132,57 @@ client.on('cheer', (channel, userstate, message) =>{
 
 
 
-client.on('connected', connectedHandler);
 
 function connectedHandler(addr, port) {
 	console.log(`* Connected to ${addr}:${port}`);
 	setInterval(save, 60000);
 }
 
+
+/*
 function save(){
 	write.output(messages, "message.json");
+	//console.log(dataBase.listCollections());
+}
+*/
+async function save(){
+	Blocker = true;
+
+	let mongoCli = MongoClient(settings.database, {useUnifiedTopology: true});
+	console.log("Connecting to db");
+	await mongoCli.connect();
+
+	let db = await mongoCli.db("Twitch");
+	console.log("connected and uploading");
+	
+	let name = settings.conn.channels[0];
+
+	let collections = await db.listCollections({},{"nameOnly": true}).toArray();
+	let collection;
+	if(collections.some((c) => {console.log(c.name); return c.name == name})){
+		collection = db.collection(name)
+	} else {
+		collection = await db.createCollection(name);
+	}
+	if(messages.filter.length != 0)
+		await collection.insertMany(messages.filter);
+
+	messages.filter = [];
+
+	console.log("uploaded");
+	Blocker = false;
+	mongoCli.close();
 }
 
 
+async function logMessage(userstate, message){
+	while(Blocker){
+
+	}
+	Blocker = true;
+	if(parse.some((x) => {return message.toLowerCase().indexOf(x) !== -1})){
+		messages.filter.push({"username": userstate.username, "message": message});
+		return;
+	}
+	Blocker = false;
+}

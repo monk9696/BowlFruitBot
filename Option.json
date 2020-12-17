@@ -1,14 +1,17 @@
 {
-	"options":{
-		"debug": true
+	"conn":{
+		"options":{
+			"debug": true
+		},
+		"connection":{
+			"reconnect": true,
+			"secure": true
+		},
+		"identity":{
+			"username": "Bot username",
+			"password": "your oauthKey"
+		},
+		"channels":["Channel","Array"]
 	},
-	"connection":{
-		"reconnect": true,
-		"secure": true
-	},
-	"identity":{
-		"username": "bowlfruitbot",
-		"password": "oauth:"
-	},
-	"channels":["#monk9696"]
+	"database": "Database Location"
 }

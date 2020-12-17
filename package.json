@@ -4,7 +4,8 @@
 	"main": "BFBot.js",
 	"dependencies": {
 		"lodash": "^4.17.20",
-		"twitch-js": "^1.2.17",
-		"ws": "^7.4.1"
+		"tmi.js": "^1.5.0",
+		"ws": "^7.4.1",
+		"mongodb": "^3.6.3"
 	}
 }
